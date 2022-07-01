@@ -23,13 +23,15 @@ dotenv.config({
 // Initialize express
 const app = express();
 const server = http.createServer(app);
-const allowedOrigins: string[] = process.env.ORIGINS?.split(",").filter((origin) => origin.trim()) ?? ["http://localhost:3000"];
+const allowedOrigins: string[] = process.env.ORIGINS?.split(",").map((origin) => origin.trim()) || [];
 const mongodbUri: string = process.env.MONGODB_URI as string;
 const corsOptionsDelegate: CorsOptionsDelegate<Request> = (req, callback) => {
-  const corsOptions: CorsOptions = { origin: false };
+  const corsOptions: CorsOptions = { origin: "https://iass-app.project.andriann.co" };
   const reqOrigin = req.headers.origin || req.header("Origin") || null;
 
-  if (reqOrigin && allowedOrigins.indexOf(reqOrigin) !== -1) {
+  console.log(reqOrigin);
+
+  if (reqOrigin && allowedOrigins && allowedOrigins.indexOf(reqOrigin) !== -1) {
     corsOptions.origin = reqOrigin;
   }
 
